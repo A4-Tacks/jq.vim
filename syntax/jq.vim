@@ -9,6 +9,8 @@ if exists('b:current_syntax')
   finish
 endif
 
+syntax sync minlines=500
+
 " syn include @jqHtml syntax/html.vim  " Doc comment HTML
 
 " jqTodo
@@ -81,8 +83,8 @@ syn match jqVariables /$[_A-Za-z0-9]\+/
 
 " Definition
 syntax keyword jqKeywords def nextgroup=jqNameDefinition skipwhite
-syn match jqNameDefinition /\<[_A-Za-z0-9]\+\>/ contained nextgroup=jqPostNameDefinition
-syn match jqNameDefinition /`[^`]\+`/ contained nextgroup=jqPostNameDefinition
+syn match jqNameDefinition /\<[_A-Za-z0-9]\+\>/     contained skipwhite nextgroup=jqPostNameDefinition,jqNameDefinitionParam
+syn match jqNameDefinition /`[^`]\+`/               contained skipwhite nextgroup=jqPostNameDefinition,jqNameDefinitionParam
 
 " Strings
 syn region jqError start=+'+ end=+'\|$\|[;)]\@=+
@@ -96,6 +98,10 @@ syn region jqInterpolation matchgroup=jqInterpolationDelimiter
 " Operators
 syn match jqOperator /:\|\([-+*/%<>=]\|\/\/\)=\?\|[!|]=\|?\/\//
 "syn region jqRange matchgroup=jqSquareBracket start=+\[+ skip=+:+ end=+\]+
+
+" Definition Extend
+syn region jqNameDefinitionParam start=/(/ end=/)\@1<=/  fold contained skipwhite skipnl nextgroup=jqPostNameDefinition contains=TOP
+syn region jqPostNameDefinition  matchgroup=jqNameDefinitionBody start=/:/ end=/;/  contained contains=TOP
 
 " Errors
 syn keyword jqError _assign _flatten _modify _nwise _plus _negate _minus _multiply
@@ -116,6 +122,8 @@ endif
 hi def link jqConditions             Boolean
 hi def link jqVariables              Identifier
 hi def link jqNameDefinition         Function
+hi def link jqNameDefinitionBody     Define
+hi def link jqPostNameDefinition     NONE
 hi def link jqTodo                   Todo
 hi def link jqComment                Comment
 hi def link jqKeywords               Keyword
