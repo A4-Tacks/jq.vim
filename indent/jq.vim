@@ -17,7 +17,7 @@ function! GetJqIndent(lnum) abort
     let prev_indent = pnum ? indent(pnum) : 0
     let indent = 0
 
-    if prev_line =~# '\v^\s*%(\|\s*)?%(def|try|then|if|elif|else)>|[:{([]$'
+    if prev_line =~# '\v^\s*%(\|\s*)?%(def|try|then|if|elif|else|reduce|foreach)>|[:{([]$'
                 \|| prev_line =~# '\v<%(try|then|if|elif|else)$'
         if prev_line !~# '\v<end%(\s*[;,])?$' || prev_line =~# '\v^\s*%(\|\s*)?def>'
             let indent += 1
