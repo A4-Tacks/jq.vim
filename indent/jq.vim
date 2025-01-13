@@ -12,28 +12,28 @@ let b:did_indent = 1
 function! GetJqIndent(lnum) abort
     let lnum = a:lnum
     let pnum = prevnonblank(lnum - 1)
-    let cline = substitute(getline(lnum), '\v\s*%(\|\s*)?%(#.*)?$', '', '')
-    let pline = substitute(getline(pnum), '\v\s*%(\|\s*)?%(#.*)?$', '', '')
-    let pindent = pnum ? indent(pnum) : 0
+    let current_line = substitute(getline(lnum), '\v\s*%(\|\s*)?%(#.*)?$', '', '')
+    let prev_line    = substitute(getline(pnum), '\v\s*%(\|\s*)?%(#.*)?$', '', '')
+    let prev_indent = pnum ? indent(pnum) : 0
     let indent = 0
 
-    if pline =~# '\v^\s*%(\|\s*)?%(def|try|then|if|elif|else)>|[:{([]$'
-                \|| pline =~# '\v<%(try|then|if|elif|else)$'
-        if pline !~# '\v<end%(\s*[;,])?$' || pline =~# '\v^\s*%(\|\s*)?def>'
+    if prev_line =~# '\v^\s*%(\|\s*)?%(def|try|then|if|elif|else)>|[:{([]$'
+                \|| prev_line =~# '\v<%(try|then|if|elif|else)$'
+        if prev_line !~# '\v<end%(\s*[;,])?$' || prev_line =~# '\v^\s*%(\|\s*)?def>'
             let indent += 1
         endif
     endif
-    if cline =~# '\v^\s*%(\|\s*)?%(%(then|elif|else|end|catch)>|[})\]])'
+    if current_line =~# '\v^\s*%(\|\s*)?%(%(then|elif|else|end|catch)>|[})\]])'
         let indent -= 1
     endif
-    if pline =~# ';$'
-        let name = synIDattr(synID(pnum, match(pline, ';$')+1, 1), 'name')
+    if prev_line =~# ';$'
+        let name = synIDattr(synID(pnum, match(prev_line, ';$')+1, 1), 'name')
         if name ==# 'jqNameDefinitionBody'
             let indent -= 1
         endif
     endif
 
-    return pindent + indent*&shiftwidth
+    return prev_indent + indent*&shiftwidth
 endfunction
 
 setlocal indentexpr=GetJqIndent(v:lnum)
