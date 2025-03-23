@@ -88,10 +88,12 @@ syn match jqNameDefinition /`[^`]\+`/ contained nextgroup=jqPostNameDefinition
 syn region jqError start=+'+ end=+'\|$\|[;)]\@=+
 syn region jqString matchgroup=jqQuote
             \ start=+"+ skip=+\\[\\"]+ end=+"+
-            \ contains=@Spell,jqInterpolation
+            \ contains=@Spell,jqInterpolation,jqEscape
 syn region jqInterpolation matchgroup=jqInterpolationDelimiter
             \ start=+\%([^\\]\%(\\\\\)*\\\)\@<!\\(+ end=+)+
             \ contained contains=TOP
+syn match jqEscape /\\["\\bfnrt]/ contained
+syn match jqEscape /\\u\x\{4}/ contained
 
 " Operators
 syn match jqOperator /:\|\([-+*/%<>=]\|\/\/\)=\?\|[!|]=\|?\/\//
@@ -126,5 +128,6 @@ hi def link jqMacro                  Macro
 hi def link jqError                  Error
 hi def link jqString                 String
 hi def link jqInterpolationDelimiter Delimiter
+hi def link jqEscape                 Special
 hi def link jqConditional            Conditional
 hi def link jqNumber                 Number
