@@ -77,12 +77,12 @@ syntax match jqMacro "@\%(text\|json\|html\|uri\|[ct]sv\|sh\|base64d\?\)\>"
 syntax match jqComment "#.*" contains=jqTodo
 
 " Variables
-syn match jqVariables /$[_A-Za-z0-9]\+/
+syn match jqVariables /$[_A-Za-z0-9]\+\%(::[_A-Za-z0-9]\+\)*/
 
 " Definition
 syntax keyword jqKeywords def nextgroup=jqNameDefinition skipwhite
-syn match jqNameDefinition /\<[_A-Za-z0-9]\+\>/ contained nextgroup=jqPostNameDefinition
-syn match jqNameDefinition /`[^`]\+`/ contained nextgroup=jqPostNameDefinition
+syn match jqNameDefinition /\<[_A-Za-z0-9]\+\%(::[_A-Za-z0-9]\+\)*\>/   contained nextgroup=jqPostNameDefinition
+syn match jqNameDefinition /`[^`]\+`/                                   contained nextgroup=jqPostNameDefinition
 
 " Strings
 syn region jqError start=+'+ end=+'\|$\|[;)]\@=+
