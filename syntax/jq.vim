@@ -74,7 +74,10 @@ syntax keyword jqFunction INDEX JOIN IN
 syntax match jqMacro "@\%(text\|json\|html\|uri\|[ct]sv\|sh\|base64d\?\)\>"
 
 " Comments
-syntax match jqComment "#.*" contains=jqTodo
+syntax region jqComment start="#" end="$" contains=jqTodo,jqCommentEscape,jqCommentError
+syntax match  jqCommentError  /\\\ze\s\+\r\?$/  contained
+syntax match  jqCommentEscape /\\\r\?$/ contained
+syntax match  jqCommentEscape /\\\\/    contained
 
 " Variables
 syn match jqVariables /$[_A-Za-z0-9]\+/
@@ -118,6 +121,8 @@ hi def link jqVariables              Identifier
 hi def link jqNameDefinition         Function
 hi def link jqTodo                   Todo
 hi def link jqComment                Comment
+hi def link jqCommentError           Error
+hi def link jqCommentEscape          Special
 hi def link jqKeywords               Keyword
 hi def link jqType                   Type
 hi def link jqOperator               Operator
